@@ -1,0 +1,438 @@
+*{
+  box-sizing: border-box;
+}
+a{
+  cursor: pointer;
+}
+body{
+  color: #222;
+  background-color: #def3e0;
+}
+img{
+  max-width: 100%;
+}
+main{
+  padding: 10px;
+  max-width: 85%;
+  margin: 0 auto;
+}
+header{
+  display:flex;
+  justify-content:space-between;
+  margin-top: 20px;
+  margin-bottom: 50px;
+  align-items: center;
+}
+header a{
+  text-decoration:none;
+  color: inherit;
+}
+header a.logo {
+  font-weight: bold;
+  font-size: 2rem; 
+  transition: color 0.3s; 
+}
+
+header a.logo:hover {
+  color: #ff6347; 
+}
+
+header nav{
+  display:flex;
+  gap: 24px;
+}
+
+
+
+.login {
+  width: 400px;
+  margin: 0 auto;
+  padding: 40px;
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.login h1 {
+  font-size: 40px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.login input[type="email"],
+.login input[type="password"],
+.login button {
+  width: 100%;
+  padding: 15px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+.login button {
+  background-color: #1c7532;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.login button:hover {
+  background-color: #26ac21;
+}
+
+
+
+
+.register {
+  width: 400px;
+  margin: 0 auto;
+  padding: 40px;
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+
+.register h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+
+.register input[type="text"],
+.register input[type="email"],
+.register input[type="password"],
+.register button {
+  width: 100%;
+  padding: 15px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+/* Nút đăng ký */
+.register button {
+  background-color: #1c7532;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.register button:hover {
+  background-color: #26ac21;
+}
+.register p {
+  color: red;
+  font-size: 14px;
+  margin-top: 10px;
+  text-align: center;
+}
+
+
+@media screen and (min-width: 700px) {
+  div.post{
+      grid-template-columns: .9fr 1.1fr;
+  }
+}
+.post-container {
+  display: grid; 
+  grid-template-columns: repeat(2, 1fr); 
+  gap: 20px;
+}
+
+.post {
+  padding: 10px; 
+  border: 1px solid #ddd; 
+  border-radius: 5px; 
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.post h2 {
+  margin: 0;
+  font-size: 2rem;
+  margin-bottom: 10px; 
+}
+
+.post a {
+  text-decoration: none;
+  color: inherit;
+  margin-right: 20px;
+}
+.post  .author{
+  font-style: italic;
+  font-size: 18px;
+}
+.post img{
+  width: 80%;
+  height: 80%;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 5px;
+}
+.post-info {
+  color: #888;
+  font-size: 1rem;
+  font-weight: bold;
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+  align-items: center; 
+}
+
+.post-info a.author {
+  color: #333;
+}
+
+.post-summary {
+  margin: 8px 0;
+  line-height: 1.8rem;
+}
+
+.post-summary {
+  margin: 8px 0; 
+  line-height: 1.8rem;
+}
+
+
+form.login, form.register{
+  max-width: 400px;
+  margin: 0 auto;
+}
+input{
+  display: block;
+  margin-bottom: 5px;
+  width: 100%;
+  padding: 5px 7px;
+  border: 2px solid #ddd;
+  border-radius: 5px;
+  background-color: #fff;
+}
+button{
+  cursor: pointer;
+  width: 100%;
+  display: block;
+  background-color: #555;
+  border:0;
+  color: #fff;
+  border-radius: 5px;
+  padding: 7px 0;
+}
+form.login h1, form.register h1{
+  text-align: center;
+}
+
+div.post-page {
+  text-align: center; 
+}
+div.post-page p {
+  text-align: initial; 
+}
+
+div.post-page .image {
+  margin: 0 auto;
+  width: 700px;
+  height: 600px;
+  overflow: hidden;
+}
+
+div.post-page .image img {
+  object-fit: cover;
+  object-position: center center;
+  width: 100%; 
+}
+
+div.post-page a {
+  color: #333;
+  text-decoration: underline;
+}
+
+div.post-page h1 {
+  margin: 10px 0 5px;
+  font-size: 3rem; 
+}
+
+div.post-page time {
+  display: block;
+  font-size: 1rem;
+  color: #aaa;
+  margin: 10px 0;
+}
+
+div.post-page .author {
+
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+  font-style: italic;
+  font-weight: bold;
+}
+
+
+div.post-page .edit-row {
+
+  display: flex;
+  justify-content: center; 
+  margin-top: 20px;
+}
+
+div.post-page .edit-btn {
+  background-color: #c06060;
+  color: white;
+  padding: 15px 30px;
+  border-radius: 5px;
+  text-decoration: none;
+  margin-right: 10px; 
+}
+
+div.post-page .edit-btn:hover {
+  background-color: #4a8333;
+}
+
+div.post-page .delete-btn {
+  background-color: #c06060;
+  color: white;
+  padding: 15px 30px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+}
+
+div.post-page .delete-btn:hover {
+  background-color: #4a8333;
+}
+
+
+div.content p{
+  line-height: 1.7rem;
+  margin: 30px 0;
+}
+div.content li{
+  margin-bottom: 10px;
+}
+
+
+a svg{
+  height:20px;
+}
+
+
+
+
+.user-info {
+  position: relative;
+}
+
+.username {
+  cursor: pointer;
+  display: inline-block;
+  width: 80px; 
+  height: 40px; 
+  border-radius: 5px; 
+  background-color: #ccc;
+  text-align: center;
+  line-height: 40px;
+  border: 2px solid #000;
+  transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s; 
+}
+
+.username:hover {
+  background-color: #ddd; 
+  transform: scale(1.05); 
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+
+
+
+.dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  width: 200px;
+  background-color: white;
+  border: none; 
+  border-radius: 8px; 
+  padding: 5px 0;
+  z-index: 1;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
+}
+
+.dropdown a {
+  display: block; 
+  padding: 10px;
+  text-decoration: none;
+  color: #333;
+  transition: background-color 0.3s ease;
+}
+
+.dropdown a:hover {
+  background-color: #34520d;
+  color: white;
+}
+
+.edit-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center; 
+  margin-bottom: 20px;
+  margin-top: 20px;
+  
+}
+
+.edit-btn, .delete-btn {
+  max-width: 500px;
+  background-color: #c06060;
+  color: #fff;
+  padding: 15px 30px;
+  border-radius: 5px;
+  text-decoration: none;
+  width: calc(50% - 5px);
+  text-align: center;
+  transition: background-color 0.3s ease;
+  margin-left:50px;
+  margin-right: 50px;
+}
+
+.edit-btn:hover, .delete-btn:hover {
+  background-color: #30942d;
+}
+.pagination {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pagination button {
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  margin: 0 5px;
+  background-color: #555;
+  border: 0;
+  color: #fff;
+  border-radius: 5px;
+}
+
+.pagination button:hover {
+  background-color: #333;
+}
+
+.my-profile {
+  display: flex;
+  align-items: center;
+}
+.avatar_myprofile{
+  width: 100px; 
+  height: 100px;
+  border-radius: 50%; 
+  margin-right: 20px
+}
