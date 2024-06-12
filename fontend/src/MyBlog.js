@@ -13,7 +13,7 @@ function MyBlog() {
     const fetchUserPosts = async () => {
       try {
         if (userInfo) {
-          const response = await fetch(`http://localhost:4000/my-blog`, {
+          const response = await fetch(`https://blog-app-rose-five.vercel.app//my-blog`, {
             credentials: 'include',
           });
           if (response.ok) {
