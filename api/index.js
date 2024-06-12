@@ -7,8 +7,6 @@ const bcrypt = require('bcryptjs');
 const app = express();
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
-const upload = multer({ storage: multer.memoryStorage() });
-const uploadMiddleware = multer({ dest: 'uploads/' });
 const path = require('path');
 const fs = require('fs');
 
@@ -96,8 +94,7 @@ app.post('/login', async (req, res) => {
 
 // API thay đổi mật khẩu
 app.post("/change-password", async (req, res) => {
-  const { currentPassword, newPassword } = req.body;
-  const { email } = req.body; 
+  const { currentPassword, newPassword, email } = req.body; 
 
   try {
     const userDoc = await User.findOne({ email });
@@ -138,61 +135,36 @@ app.post('/logout', (req,res) => {
 });
 
 // API đăng bài viết mới
-app.post('/post', uploadMiddleware.single('file'), async (req,res) => {
-  const {originalname,path} = req.file;
-  const parts = originalname.split('.');
-  const ext = parts[parts.length - 1];
-  const newPath = path+'.'+ext;
-  fs.renameSync(path, newPath);
+app.post('/post', async (req,res) => {
+  const { title, summary, content, authorId } = req.body;
 
-  const {token} = req.cookies;
-  if (!token) {
-    return res.status(401).json({ error: 'Authentication required' });
-  }
-  jwt.verify(token, secret, {}, async (err,info) => {
-    if (err) throw err;
-    const {title,summary,content} = req.body;
-    const postDoc = await Post.create({
+  try {
+        const postDoc = await Post.create({
       title,
       summary,
       content,
-      cover:newPath,
-      author:info.id,
+      author: authorId,
     });
     res.json(postDoc);
-  });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
 });
 
 // API chỉnh sửa bài viết
-app.put('/post', uploadMiddleware.single('file'), async (req, res) => {
+app.put('/post', async (req, res) => {
   try {
-    let newPath = null;
-    if (req.file) {
-      const { originalname, path } = req.file;
-      const parts = originalname.split('.');
-      const ext = parts[parts.length - 1];
-      newPath = path + '.' + ext;
-      fs.renameSync(path, newPath);
-    }
-
-    const { token } = req.cookies;
-    const decodedToken = jwt.verify(token, secret);
-
     const { id, title, summary, content } = req.body;
+
     const postDoc = await Post.findByIdAndUpdate(id, {
       title,
       summary,
       content,
-      cover: newPath ? newPath : undefined, 
     });
 
     if (!postDoc) {
       return res.status(404).json('Không tìm thấy bài viết');
-    }
-
-    const isAuthor = JSON.stringify(postDoc.author) === JSON.stringify(decodedToken.id);
-    if (!isAuthor) {
-      return res.status(400).json('Bạn không phải là tác giả');
     }
 
     res.json(postDoc);
@@ -204,35 +176,35 @@ app.put('/post', uploadMiddleware.single('file'), async (req, res) => {
 
 // API lấy danh sách bài viết
 app.get('/post', async (req,res) => {
-  res.json(
-    await Post.find()
+  try {
+    const posts = await Post.find()
       .populate('author', ['username'])
-      .sort({createdAt: -1})
-      
-  );
+      .sort({createdAt: -1});
+
+    res.json(posts);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
 });
 
 // API lấy thông tin của một bài viết cụ thể
 app.get('/post/:id', async (req, res) => {
-  const {id} = req.params;
-  const postDoc = await Post.findById(id).populate('author', ['username']);
-  res.json(postDoc);
-})
+  const { id } = req.params;
+  try {
+    const postDoc = await Post.findById(id).populate('author', ['username']);
+    res.json(postDoc);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
 // API xóa bài viết
 app.delete("/post/:id", async (req, res) => {
   const { id } = req.params;
 
   try {
-    const post = await Post.findById(id);
-
-    if (!post) {
-      return res.status(404).json({ success: false, error: "Post not found" });
-    }
-    if (post.cover) {
-      const filePath = path.join(__dirname, post.cover);
-      fs.unlinkSync(filePath);
-    }
     const deletedPost = await Post.findByIdAndDelete(id);
 
     if (!deletedPost) {
@@ -248,13 +220,14 @@ app.delete("/post/:id", async (req, res) => {
 
 // API lấy danh sách bài viết của người dùng
 app.get('/my-blog', async (req, res) => {
-  try {
-    const { token } = req.cookies;
-    if (!token) {
-      return res.status(401).json({ error: 'Authentication required' });
-    }
-    const decodedToken = jwt.verify(token, secret);
+  const { token } = req.cookies;
 
+  if (!token) {
+    return res.status(401).json({ error: 'Authentication required' });
+  }
+
+  try {
+    const decodedToken = jwt.verify(token, secret);
     const posts = await Post.find({ author: decodedToken.id })
       .populate('author', 'username')
       .sort({ createdAt: -1 })
@@ -272,12 +245,9 @@ app.get('/avatar/:filename', (req, res) => {
   const filename = req.params.filename;
   const filePath = path.join(__dirname, 'user_avatar', filename);
 
- 
   if (fs.existsSync(filePath)) {
-   
     res.sendFile(filePath);
   } else {
-    
     const defaultAvatarPath = path.join(__dirname, 'user_avatar', 'default.jpg');
     res.sendFile(defaultAvatarPath);
   }
@@ -285,14 +255,12 @@ app.get('/avatar/:filename', (req, res) => {
 
 // API lấy số lượng bài viết của người dùng
 app.get('/post-count', async (req, res) => {
+  const { token } = req.cookies;
+  if (!token) {
+    return res.status(401).json({ error: 'Authentication required' });
+  }
   try {
-    const { token } = req.cookies;
-    if (!token) {
-      return res.status(401).json({ error: 'Authentication required' });
-    }
     const decodedToken = jwt.verify(token, secret);
-
-    
     const postCount = await Post.countDocuments({ author: decodedToken.id });
 
     res.json({ postCount });
@@ -301,4 +269,6 @@ app.get('/post-count', async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+
 app.listen(4000);
+
