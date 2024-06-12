@@ -13,7 +13,7 @@ export default function IndexPage() {
 
   const fetchPosts = async () => {
     try {
-      const response = await fetch('http://localhost:4000/post');
+      const response = await fetch('https://blog-app-lxee.vercel.app/post');
       if (response.ok) {
         const data = await response.json();
         setPosts(data);
